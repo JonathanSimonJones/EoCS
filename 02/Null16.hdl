@@ -1,0 +1,29 @@
+// File name: projects/02/Null16.hdl
+
+/**
+ * Null16: 0's a 16 bit bus any input
+ */
+
+CHIP Null16 {
+    IN in[16];
+    OUT out[16];
+
+    PARTS:
+   // Put you code here:
+   Null(in=in[0], out=out[0]);
+   Null(in=in[1], out=out[1]);
+   Null(in=in[2], out=out[2]);
+   Null(in=in[3], out=out[3]);
+   Null(in=in[4], out=out[4]);
+   Null(in=in[5], out=out[5]);
+   Null(in=in[6], out=out[6]);
+   Null(in=in[7], out=out[7]);
+   Null(in=in[8], out=out[8]);
+   Null(in=in[9], out=out[9]);
+   Null(in=in[10], out=out[10]);
+   Null(in=in[11], out=out[11]);
+   Null(in=in[12], out=out[12]);
+   Null(in=in[13], out=out[13]);
+   Null(in=in[14], out=out[14]);
+   Null(in=in[15], out=out[15]);
+}
