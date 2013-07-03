@@ -1,0 +1,42 @@
+// File name: projects/02/CheckZeroResult16.hdl
+// Author: Jonathan Simon Jones
+// Date: 02_07_13
+
+/**
+ * CheckZeroResult16: Check to see if the result is zero,
+ *					  if result is zero, out true,
+ *					  if result is not zero, out false
+ */
+ 
+CHIP CheckZeroResult16 {
+	IN in[16];
+	OUT out;
+	
+	PARTS:
+	// Put you code here:
+	// Layer 1
+	Or(a=in[0], b=in[1], out=out1a);
+	Or(a=in[2], b=in[3], out=out1b);
+	Or(a=in[4], b=in[5], out=out1c);
+	Or(a=in[6], b=in[7], out=out1d);
+	Or(a=in[8], b=in[9], out=out1e);
+	Or(a=in[10], b=in[11], out=out1f);
+	Or(a=in[12], b=in[13], out=out1g);
+	Or(a=in[14], b=in[15], out=out1h);
+	
+	// Layer 2
+	Or(a=out1a, b=out1b, out=out2a);
+	Or(a=out1c, b=out1d, out=out2b);
+	Or(a=out1e, b=out1f, out=out2c);
+	Or(a=out1g, b=out1h, out=out2d);
+	
+	// Layer 3
+	Or(a=out2a, b=out2b, out=out3a);
+	Or(a=out2c, b=out2d, out=out3b);
+	
+	// Layer 4
+	Or(a=out3a, b=out3b, out=out4a);
+	
+	// Layer 5
+	Not(in=out4a, out=out);
+}

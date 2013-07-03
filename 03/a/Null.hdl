@@ -1,0 +1,19 @@
+// File name: projects/02/Null.hdl
+// Author: Jonathan Simon Jones
+// Date: 01_07_13
+
+/**
+ * Null: 0's any input
+ */
+
+CHIP Null {
+    IN in;
+    OUT out;
+
+    PARTS:
+   // Put you code here:
+   Nand(a=in, b=in, out=NandOut);
+   And(a=in, b=in, out=AndOut);
+   Or(a=NandOut, b=AndOut, out=OrOut);
+   Not(in=OrOut, out=out);
+}

@@ -17,7 +17,49 @@ CHIP PC {
 
     PARTS:
     // Put your code here:
+	Mux16(a=loop, b=in, sel=load, out=outMux);
+	
+	// Increment?
+	Not(in=load, out=notload);
+	And(a=notload, b=inc, out=andout);
+	DMux16(in=outMux, sel=andout, a=inca, b=incb);
+	Add16(a[0]=true, a[1..15]=false, b=incb, out=outincb);
+	Mux16(a=inca, b=outincb, sel=andout, out=incOut);
+	
+	// Reset?
+	DMux16(in=incOut, sel=reset, a=reseta, b=resetb);
+	Null16(in=resetb, out=outresetb);
+	Mux16(a=reseta, b=outresetb, sel=reset, out=outReset);
+	
+	// Register
+	Or(a=load, b=inc, out=orOut1);
+	Or(a=orOut1, b=reset, out=orOut2);
+	Register(in=outReset, load=orOut2, out=out, out=loop);
 }
+
+
+/*
+    IN in[16],load,inc,reset;
+    OUT out[16];
+
+    PARTS:
+    // Put your code here:
+	Mux16(a=loop, b=in, sel=load, out=outMux);
+	
+	// Increment?
+	DMux16(in=outMux, sel=inc, a=inca, b=incb);
+	Add16(a[0]=true, a[1..15]=false, b=incb, out=outincb);
+	Mux16(a=inca, b=outincb, sel=inc, out=incOut);
+	
+	// Reset?
+	DMux16(in=incOut, sel=reset, a=reseta, b=resetb);
+	Null16(in=resetb, out=outresetb);
+	Mux16(a=reseta, b=outresetb, sel=reset, out=outReset);
+	
+	// Register
+	Or(a=load, b=inc, out=orOut);
+	Register(in=outReset, load=orOut, out=out, out=loop);
+*/
 
 
 

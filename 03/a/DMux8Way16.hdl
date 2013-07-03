@@ -1,0 +1,31 @@
+// File name: projects/02/DMux16.hdl
+// Author: Jonathan Simon Jones
+// Date: 02_07_13
+
+/**
+ * 8-way 16-bit demultiplexor.
+ * out = a if sel==000
+ *       b if sel==001
+ *       etc.
+ *       h if sel==111
+ */
+ 
+CHIP DMux8Way16{
+    IN in[16], sel[3];
+    OUT a[16], b[16], c[16], d[16], e[16], f[16], g[16], h[16];
+
+    PARTS:
+    // Put your code here:
+	// Layer 1
+	DMux16(in=in, sel=sel[2], a=o1, b=o2);
+	
+	// Layer 2
+	DMux16(in=o1, sel=sel[1], a=o3, b=o4);
+	DMux16(in=o2, sel=sel[1], a=o5, b=o6);
+	
+	// Layer 3
+	DMux16(in=o3, sel=sel[0], a=a, b=b);
+	DMux16(in=o4, sel=sel[0], a=c, b=d);
+	DMux16(in=o5, sel=sel[0], a=e, b=f);
+	DMux16(in=o6, sel=sel[0], a=g, b=h);
+}

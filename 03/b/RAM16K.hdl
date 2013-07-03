@@ -16,4 +16,11 @@ CHIP RAM16K {
 
     PARTS:
     // Put your code here:
+	SplitFourteenBit(in=address, a=lsbs, b=msbs);
+	DMux4Way(in=load, sel=msbs, a=loada, b=loadb, c=loadc, d=loadd);
+	RAM4K(in=in, load=loada, address=lsbs, out=r1);
+	RAM4K(in=in, load=loadb, address=lsbs, out=r2);
+	RAM4K(in=in, load=loadc, address=lsbs, out=r3);
+	RAM4K(in=in, load=loadd, address=lsbs, out=r4);
+	Mux4Way16(a=r1, b=r2, c=r3, d=r4, sel=msbs, out=out);
 }

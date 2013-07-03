@@ -1,0 +1,16 @@
+// Filename: SixBitSplitterKeepLSBs.hdl
+// Author: Jonathan Simon Jones
+// Date: 03_07_13
+
+// Takes 6 bit input and outputs LSBits
+
+CHIP SixBitSplitterKeepLSBs {
+    IN in[6];
+    OUT out[3];
+
+    PARTS:
+    // Put your code here:
+	TopTwoTrue(a=in[2], b=in[5], out=out[2]);
+	TopTwoTrue(a=in[1], b=in[4], out=out[1]);
+	TopTwoTrue(a=in[0], b=in[3], out=out[0]);
+}

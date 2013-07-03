@@ -16,4 +16,16 @@ CHIP RAM64 {
 
     PARTS:
     // Put your code here:
+	SixBitSplitterKeepMSBs(in=address, out=msbs);
+	SixBitSplitterKeepLSBs(in=address, out=lsbs);
+	DMux8Way(in=load, sel=msbs, a=loada, b=loadb, c=loadc, d=loadd, e=loade, f=loadf, g=loadg, h=loadh);
+	RAM8(in=in, load=loada, address=lsbs, out=r1);
+	RAM8(in=in, load=loadb, address=lsbs, out=r2);
+	RAM8(in=in, load=loadc, address=lsbs, out=r3);
+	RAM8(in=in, load=loadd, address=lsbs, out=r4);
+	RAM8(in=in, load=loade, address=lsbs, out=r5);
+	RAM8(in=in, load=loadf, address=lsbs, out=r6);
+	RAM8(in=in, load=loadg, address=lsbs, out=r7);
+	RAM8(in=in, load=loadh, address=lsbs, out=r8);
+	Mux8Way16(a=r1, b=r2, c=r3, d=r4, e=r5, f=r6, g=r7, h=r8, sel=msbs, out=out);
 }

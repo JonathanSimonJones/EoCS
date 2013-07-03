@@ -46,6 +46,45 @@ CHIP ALU {
 
     PARTS:
    // Put you code here:
-   Null16(in=x, out=null16out);
+   // Null x?
+   DMux16(in=x, sel=zx, a=nullXa, b=nullXb);
+   Null16(in=nullXb, out=nullxOut);
+   Mux16(a=nullXa, b=nullxOut, sel=zx, out=rNullX);
    
+   // Negate x?
+   DMux16(in=rNullX, sel=nx, a=negateXa, b=negateXb);
+   Not16(in=negateXb, out=rNegateXb);
+   Mux16(a=negateXa, b=rNegateXb, sel=nx, out=rNegateX);
+   
+   // Null y?
+   DMux16(in=y, sel=zy, a=nullYa, b=nullYb);
+   Null16(in=nullYb, out=nullyOut);
+   Mux16(a=nullYa, b=nullyOut, sel=zy, out=rNullY);
+   
+   // Negate y?
+   DMux16(in=rNullY, sel=ny, a=negateYa, b=negateYb);
+   Not16(in=negateYb, out=rNegateYb);
+   Mux16(a=negateYa, b=rNegateYb, sel=ny, out=rNegateY);
+   
+   // Bitwise And or Adding?
+   DMux16(in=rNegateX, sel=f, a=AorAXa, b=AorAXb);
+   DMux16(in=rNegateY, sel=f, a=AorAYa, b=AorAYb);
+   And16(a=AorAXa, b=AorAYa, out=AndOut);
+   Add16(a=AorAXb, b=AorAYb, out=AddOut);
+   Mux16(a=AndOut, b=AddOut, sel=f, out=AorAOut);
+   
+   // Negate output?
+   DMux16(in=AorAOut, sel=no, a=negateA, b=negateB);
+   Not16(in=negateB, out=negateOutB);
+   Mux16(a=negateA, b=negateOutB, sel=no, out=negateOut, out[15]=firstBit);
+   
+   // Calculate zr
+   CheckZeroResult16(in=negateOut, out=zr);
+   
+   // Calculate ng
+   And(a=firstBit, b=true, out=ng);
+   
+   // Quick fix
+   Not16(in=negateOut, out=negateOut2);
+   Not16(in=negateOut2, out=out);
 }
