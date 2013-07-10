@@ -1,0 +1,19 @@
+// filename: TopTwoTrue.hdl
+// Author: Jonathan Simon Jones
+// Date: 03_07_13
+
+CHIP TopTwoTrue {
+    IN a, b;
+    OUT out;
+
+    PARTS:
+    // Put your code here:
+	Or(a=a, b=b, out=g1);
+	Not(in=g1, out=g2);
+	
+	Not(in=a, out=nota);
+	And(a=nota, b=b, out=g3);
+	
+	Or(a=g2, b=g3, out=orOut);
+	Not(in=orOut, out=out);
+}
