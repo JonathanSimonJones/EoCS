@@ -5,14 +5,13 @@
 CHIP Decode {
 	IN in[16];
 	OUT addressForA, 
-		out, 
 		address[15], 
 		b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12, b13, b14, b15, b16,
 		a,
 		c[6], 
-		d[3], 
+		d[3],
 		j[3],
-		aInstruction
+		aInstruction,
 		cInstruction,
 		writeM;
 	
@@ -52,5 +51,5 @@ CHIP Decode {
 	Not(in=o15, out=b15, out=address[14]);
 	Not(in=o16, out=b16, out=aRegLoad);
 	
-	DMux(in=in, sel=b16, a=aInstruction, b=cInstruction);
+	DMux(in=in, sel=b16, a=aInstruction, b=cInstruction);				   
 }

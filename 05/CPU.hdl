@@ -41,11 +41,66 @@ CHIP CPU {
     PARTS:
     // Put your code here:
 	
-	Decode(in=instruction, out=);
+	// Decode input
+	Decode(in=instruction, 
+		addressForA=addressForA,  
+		address[15]= addressM, 
+		b1=b1, b2=b2, b3=b3, b4=b4, b5=b5, b6=b6, b7=b7, 
+		b8=b8, b9=b9, b10=b10, b11=b11, b12=b12, b13=b13, 
+		b14=b14, b15=b15, b16=b16,
+		a=a,
+		c[6]=c, 
+		d[3]=d,
+		j[3]=j,
+		aInstruction=aInstruction,
+		cInstruction=cInstruction,
+		writeM=writeM);
+	
 	Mux16(a=instruction, b=ALUout, sel=, out=inA);
-	ARegister(in=inA, load=b6, out=aRegOut, out=addressM);
+	ARegister(in=inA, load=b6, out=aRegOut);
 	Mux16(a=aRegOut, b=inM, sel=, outAM);
-	ALU(x=outD, y=outAM, zx=b12, nx=b11, zy=b10, ny=b9, f=b8, no=b7, zr=, ng=, out=outM, out=ALUout);
-	DRegister(in=ALUout, sel=b5, out=outD);
-	PC(in=aRegOut, load=, reset=reset, out=pcOut);
+	ALU(x=outD, y=outAM, zx=b12, nx=b11, zy=b10, ny=b9, f=b8, no=b7, zr=zr, ng=ng, out=outM, out=ALUout);
+	DRegister(in=ALUout, load=b5, out=outD);
+	PC(in=aRegOut, load=jumpSel, reset=reset, out=pcOut);
+	
+	// Jump logic
+	// Split into 8 separate calculations
+	Mux8Way(in=true, sel=j, a=noJump, 
+							   b=OGZ,
+							   c=OEZ,
+							   d=OGEZ,
+							   e=OLZ,
+							   f=ONEZ,
+							   g=OLEZ,
+							   h=jump);
+							   
+	// no jump
+	Not(in=noJump, out=oNoJump);
+	
+	// OGZ
+	Not(in=ng, out=rng);			// used multiple times
+	And(a=OGZ, b=rng, out=ogzNng);
+	Not(in=zr, out=rzr);			// used multiple times
+	And(a=ogzNng, b=rzr, out=oOGZ);
+	
+	// OEZ
+	And(a=OEZ, b=zr, out=oOEZ);
+	
+	// OGEZ
+	And(a=OGEZ, b=rng, out=oOGEZ);
+	
+	// OLZ
+	And(a=OLZ, b=ng, out=olzNng);
+	And(a=olzNng, b=rzr, out=oOLZ);
+	
+	// ONEZ
+	And(a=ONEZ, b=rzr, out=oONEZ);
+	
+	// OLEZ
+	And(a=OLEZ, b=ng, out=olezNng);
+	And(a=olezNng, b=zr, out=oOLEZ);
+	
+	// Regroup to get final result
+	DMux8Way(a=oNoJump, b=oOGZ, c=oOEZ, d=oOGEZ, e=oOLZ, f=oONEZ, g=oOLEZ, h=jump, sel=j, out=jumpSel);
+			 
 }
