@@ -4,16 +4,17 @@
 
 CHIP Decode {
 	IN in[16];
-	OUT addressForA, 
-		address[15], 
+	OUT address[15], 
 		b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12, b13, b14, b15, b16,
 		a,
 		c[6], 
 		d[3],
 		j[3],
-		aInstruction,
-		cInstruction,
-		writeM;
+		//aInstruction,
+		//cInstruction,
+		writeM,
+		loadA,
+		loadD;
 	
 	PARTS:
 	// Code goes here
@@ -34,22 +35,51 @@ CHIP Decode {
 	Not(in=in[14], out=o15);
 	Not(in=in[15], out=o16);
 	
-	Not(in=o1, out=b1, out=address[0], out=j[0]);
-	Not(in=o2, out=b2, out=address[1], out=j[1]);
-	Not(in=o3, out=b3, out=address[2], out=j[2]);
-	Not(in=o4, out=b4, out=address[3], out=d[0], out=writeM);
-	Not(in=o5, out=b5, out=address[4], out=d[1]);
-	Not(in=o6, out=b6, out=address[5], out=d[2]);
-	Not(in=o7, out=b7, out=address[6], out=c[0]);
-	Not(in=o8, out=b8, out=address[7], out=c[1]);
-	Not(in=o9, out=b9, out=address[8], out=c[2]);
-	Not(in=o10, out=b10, out=address[9], out=c[3]);
-	Not(in=o11, out=b11, out=address[10], out=c[4]);
-	Not(in=o12, out=b12, out=address[11], out=c[5]);
-	Not(in=o13, out=b13, out=address[12], out=a);
-	Not(in=o14, out=b14, out=address[13]);
-	Not(in=o15, out=b15, out=address[14]);
-	Not(in=o16, out=b16, out=aRegLoad);
+	Not(in=o1, out=b1, out=address[0], out=j[0] );
+	Not(in=o2, out=b2, out=address[1], out=j[1] );
+	Not(in=o3, out=b3, out=address[2], out=j[2] );
+	Not(in=o4, out=b4, out=address[3], out=d[0], out=writeMcheck );
+	Not(in=o5, out=b5, out=address[4], out=d[1], out=loadDCheck );
+	Not(in=o6, out=b6, out=address[5], out=d[2], out=loadACheck );
+	Not(in=o7, out=b7, out=address[6], out=c[0] );
+	Not(in=o8, out=b8, out=address[7], out=c[1] );
+	Not(in=o9, out=b9, out=address[8], out=c[2] );
+	Not(in=o10, out=b10, out=address[9], out=c[3] );
+	Not(in=o11, out=b11, out=address[10], out=c[4] );
+	Not(in=o12, out=b12, out=address[11], out=c[5] );
+	Not(in=o13, out=b13, out=address[12], out=a );
+	Not(in=o14, out=b14, out=address[13] );
+	Not(in=o15, out=b15, out=address[14] );
+	Not(in=o16, out=b16, out=writeMcheck2);
 	
-	DMux(in=in, sel=b16, a=aInstruction, b=cInstruction);				   
+	//DMux(in=in, sel=b16, a=aInstruction, b=cInstruction);	
+	
+	// WriteM?
+	And(a=writeMcheck, b=writeMcheck2, out=writeM);
+	
+	// Load A?
+	Or(a=loadACheck, b=o16, out=loadA);
+	
+	// Load D?
+	And(a=loadDCheck, b=writeMcheck2, out=loadD);
+	
+	
+	/*
+	And(a=c1, b=c16, out=b1, out=address[0], out=j[0]);
+	And(a=c2, b=c16, out=b2, out=address[1], out=j[1]);
+	And(a=c3, b=c16, out=b3, out=address[2], out=j[2]);
+	And(a=c4, b=c16, out=b4, out=address[3], out=d[0], out=writeMcheck);
+	And(a=c5, b=c16, out=b5, out=address[4], out=d[1]);
+	And(a=c6, b=c16, out=b6, out=address[5], out=d[2]);
+	And(a=c7, b=c16, out=b7, out=address[6], out=c[0]);
+	And(a=c8, b=c16, out=b8, out=address[7], out=c[1]);
+	And(a=c9, b=c16, out=b9, out=address[8], out=c[2]);
+	And(a=c10, b=c16, out=b10, out=address[9], out=c[3]);
+	And(a=c11, b=c16, out=b11, out=address[10], out=c[4]);
+	And(a=c12, b=c16, out=b12, out=address[11], out=c[5]);
+	And(a=c13, b=c16, out=b13, out=address[12], out=a);
+	And(a=c14, b=c16, out=b14, out=address[13]);
+	And(a=c15, b=c16, out=b15, out=address[14]);
+	And(a=c16, b=c16, out=b16);
+	*/
 }
