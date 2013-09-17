@@ -1,0 +1,15 @@
+
+
+#include "SymbolTable.hpp"
+
+void addEntry(string symbol, int address)
+{
+}
+
+bool contains(string symbol)
+{
+}
+
+int getAddress(string symbol)
+{
+}

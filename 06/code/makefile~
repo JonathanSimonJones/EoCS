@@ -1,0 +1,2 @@
+g++ -Wall -c main.cpp code.hpp
+g++ -o Parser 

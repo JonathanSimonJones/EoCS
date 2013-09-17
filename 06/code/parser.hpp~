@@ -1,0 +1,16 @@
+// nand2tetris/projects/06/code/parser.hpp
+// Definitions for parser module of assembler
+#ifndef PARSER_HPP
+#define PARSER_HPP
+
+class parser
+{
+public:
+  parser();
+  bool hasMoreCommands();
+  void advance();
+  
+private:
+};
+
+#endif PARSER_HPP
